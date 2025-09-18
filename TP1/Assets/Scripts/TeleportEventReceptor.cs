@@ -10,7 +10,8 @@ public class TeleportEventReceptor : MonoBehaviour, ILocomotionEventHandler
     {
         if (locomotionEvent.Translation == LocomotionEvent.TranslationType.Absolute)
         {
-            Debug.Log("We received request to teleport");
+            // Debug.Log("We received request to teleport");
+            GetComponent<OVRScreenFade>().FadeIn();
         }
     }
 
