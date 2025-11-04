@@ -164,6 +164,7 @@ GameObject:
   - component: {fileID: 4204016736317672970}
   - component: {fileID: 2665899626799488408}
   - component: {fileID: 4133135573151294438}
+  - component: {fileID: 5935130369141719723}
   m_Layer: 0
   m_Name: ChirstmasSock
   m_TagString: Untagged
@@ -366,6 +367,18 @@ MonoBehaviour:
   m_Elasticity: 0.15
   m_EnableElasticBreakLimit: 0
   m_ElasticBreakLimit: 0.5
+--- !u!114 &5935130369141719723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4468751110618584445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84e1300b4b0af224fb7b8b9656155128, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StickToWall
 --- !u!1001 &1369797011215871791
 PrefabInstance:
   m_ObjectHideFlags: 0
