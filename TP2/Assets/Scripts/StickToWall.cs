@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class StickToWall : MonoBehaviour
 {
     ARRaycastManager raycastManager;
+    Camera cam;
     Rigidbody rb;
     [SerializeField]
     bool isGlued = false;
@@ -13,6 +14,7 @@ public class StickToWall : MonoBehaviour
     void Start()
     {
         raycastManager = FindAnyObjectByType<ARRaycastManager>();
+        cam = FindAnyObjectByType<Camera>();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -24,8 +26,8 @@ public class StickToWall : MonoBehaviour
 
         List<ARRaycastHit> hits = new List<ARRaycastHit>();
 
-        // ray depuis l'objfet vers l'avant
-        if (raycastManager.Raycast(new Ray(transform.position, transform.forward), hits, TrackableType.Planes))
+        // Ray depuis la caméra, vers l'avant
+        if (raycastManager.Raycast(new Ray(cam.transform.position, transform.position - cam.transform.position), hits, TrackableType.Planes))
         {
             var plane = hits[0];
 
