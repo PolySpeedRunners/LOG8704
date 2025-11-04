@@ -2,33 +2,26 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
-[RequireComponent(typeof(ARTrackedImageManager))]
 public class ImageRecognitionHandler : MonoBehaviour
 {
     [SerializeField] private GameObject modelPrefab;
-    private ARTrackedImageManager _manager;
+    private ARTrackedImageManager _trackedImageManager;
 
-    void Awake()
-    {
-        _manager = GetComponent<ARTrackedImageManager>();
-    }
+    void Awake() => _trackedImageManager = GetComponent<ARTrackedImageManager>();
 
-    void OnEnable()
-    {
-        _manager.trackedImagesChanged += OnTrackedImagesChanged;
-    }
-
-    void OnDisable()
-    {
-        _manager.trackedImagesChanged -= OnTrackedImagesChanged;
-    }
+    void OnEnable() => _trackedImageManager.trackedImagesChanged += OnTrackedImagesChanged;
+    void OnDisable() => _trackedImageManager.trackedImagesChanged -= OnTrackedImagesChanged;
 
     private void OnTrackedImagesChanged(ARTrackedImagesChangedEventArgs args)
     {
         foreach (var trackedImage in args.added)
         {
-            // Spawn prefab at detected image
-            Instantiate(modelPrefab, trackedImage.transform.position, trackedImage.transform.rotation, trackedImage.transform);
+            GameObject obj = Instantiate(modelPrefab, trackedImage.transform);
+        }
+
+        foreach (var trackedImage in args.updated)
+        {
+            trackedImage.transform.localScale = Vector3.one * trackedImage.size.x;
         }
     }
 }
