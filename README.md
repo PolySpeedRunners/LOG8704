@@ -1,3 +1,4 @@
+TP1
 Pour compiler le projet: 
 - Aller au dernier commit "Remise Finale"
 - Sélectionner la scène `Assets/Scenes/XRScene` du projet Unity
@@ -9,3 +10,15 @@ Pour build le projet:
 - Brancher avec un cable usb-c compatible le casque à votre ordinateur
 - Dans Files>Build Profils dans la section Platform settings, sélectionner comme "Run device" le meta quest 3 sous le menu déroulant
 - Cliquer sur build and run 
+
+TP2
+Pour tester le projet dans l'éditeur:
+- Aller au dernier commit "Remise Finale TP2"
+- Sélectionner la scène `Assets/Scenes/SampleScene` du projet Unity
+- Cliquer sur le bouton play
+- Scanner la pièce en tenant le click droit et utilisant les flèches w, a, s, d
+- Sélectionner des objets et commencer à les placer. 
+
+Pour build le projet et le tester sur android:
+- CHARLES 
+- NOMME TON COMMIT AS "Remise finale TP2"
