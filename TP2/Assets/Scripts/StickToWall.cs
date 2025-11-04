@@ -6,13 +6,16 @@ using System.Collections.Generic;
 public class StickToWall : MonoBehaviour
 {
     ARRaycastManager raycastManager;
+    Camera cam;
     Rigidbody rb;
     [SerializeField]
     bool isGlued = false;
-
+    [SerializeField]
+    Quaternion rotationOffset = Quaternion.Euler(0,0,0);
     void Start()
     {
         raycastManager = FindAnyObjectByType<ARRaycastManager>();
+        cam = FindAnyObjectByType<Camera>();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -24,8 +27,8 @@ public class StickToWall : MonoBehaviour
 
         List<ARRaycastHit> hits = new List<ARRaycastHit>();
 
-        // ray depuis l'objfet vers l'avant
-        if (raycastManager.Raycast(new Ray(transform.position, transform.forward), hits, TrackableType.Planes))
+        // Ray depuis la caméra, vers l'avant
+        if (raycastManager.Raycast(new Ray(cam.transform.position, transform.position - cam.transform.position), hits, TrackableType.Planes))
         {
             var plane = hits[0];
 
@@ -38,7 +41,7 @@ public class StickToWall : MonoBehaviour
             {
                 Vector3 wallNormal = normal;
                 Quaternion look = Quaternion.LookRotation(-wallNormal, Vector3.up);
-                transform.rotation = look * Quaternion.Euler(0, 90, 0);
+                transform.rotation = look * rotationOffset;
 
                 rb.useGravity = false;
                 rb.isKinematic = true;

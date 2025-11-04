@@ -379,6 +379,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84e1300b4b0af224fb7b8b9656155128, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StickToWall
+  isGlued: 0
+  rotationOffset: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
 --- !u!1001 &1369797011215871791
 PrefabInstance:
   m_ObjectHideFlags: 0
