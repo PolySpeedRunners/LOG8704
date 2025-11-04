@@ -10,7 +10,8 @@ public class StickToWall : MonoBehaviour
     Rigidbody rb;
     [SerializeField]
     bool isGlued = false;
-
+    [SerializeField]
+    Quaternion rotationOffset = Quaternion.Euler(0,0,0);
     void Start()
     {
         raycastManager = FindAnyObjectByType<ARRaycastManager>();
@@ -40,7 +41,7 @@ public class StickToWall : MonoBehaviour
             {
                 Vector3 wallNormal = normal;
                 Quaternion look = Quaternion.LookRotation(-wallNormal, Vector3.up);
-                transform.rotation = look * Quaternion.Euler(0, 90, 0);
+                transform.rotation = look * rotationOffset;
 
                 rb.useGravity = false;
                 rb.isKinematic = true;
