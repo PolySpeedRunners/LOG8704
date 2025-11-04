@@ -16,4 +16,14 @@ MonoBehaviour:
   m_GuidHigh: 18093820031760300687
   m_DataStore:
     m_Storage: []
-  m_Images: []
+  m_Images:
+  - m_SerializedGuid:
+      m_GuidLow: 5259245324633240830
+      m_GuidHigh: 3999483818250981248
+    m_SerializedTextureGuid:
+      m_GuidLow: 9075958196164277658
+      m_GuidHigh: 3656052743653795450
+    m_Size: {x: 0, y: 0}
+    m_SpecifySize: 0
+    m_Name: StartIcon
+    m_Texture: {fileID: 0}
