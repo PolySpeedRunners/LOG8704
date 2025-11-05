@@ -20,5 +20,7 @@ Pour tester le projet dans l'éditeur:
 - Sélectionner des objets et commencer à les placer. 
 
 Pour build le projet et le tester sur android:
-- CHARLES 
-- NOMME TON COMMIT AS "Remise finale TP2"
+- Sélectionner le build profile d'android (l'application n'a été testé que pour Android)
+- Sélectionner comme option de build "Development build"
+- Sélectionner l'appareil sur lequel vous voulez build et rouler l'application (l'appareil doit être connecté)
+- Sélectionner "build and run" puis essayer l'application lors de la fin du build. 
