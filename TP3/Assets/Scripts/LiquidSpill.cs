@@ -38,7 +38,12 @@ public class LiquidSpill : MonoBehaviour
 
             // Tag droplets
             oneSpill.tag = "Liquid";
-
+            ChemicalContainer container = GetComponentInParent<ChemicalContainer>();
+            if (container != null)
+            {
+                DropletMetadata meta = oneSpill.AddComponent<DropletMetadata>();
+                meta.Chemical = container.ChemicalType;
+            }
             oneSpill.SetActive(false);
             dropTemplates[k] = oneSpill;
         }

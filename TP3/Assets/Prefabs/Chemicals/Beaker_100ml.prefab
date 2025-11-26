@@ -322,6 +322,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6399003480689289424}
   - component: {fileID: 4112765392845999365}
+  - component: {fileID: 5143908458278382969}
   m_Layer: 0
   m_Name: Colliders
   m_TagString: Trashable
@@ -366,6 +367,27 @@ CapsuleCollider:
   m_Radius: 0.02
   m_Height: 0.18
   m_Direction: 1
+  m_Center: {x: 0, y: 0.1, z: 0}
+--- !u!65 &5143908458278382969
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7507196535034985534}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.05, y: 0.1, z: 0.05}
   m_Center: {x: 0, y: 0.05, z: 0}
 --- !u!1 &7528109225136422641
 GameObject:
@@ -783,6 +805,7 @@ GameObject:
   - component: {fileID: 7528109225136841431}
   - component: {fileID: 915923158516611403}
   - component: {fileID: 7257195761293209928}
+  - component: {fileID: 3888500437201154115}
   m_Layer: 0
   m_Name: Beaker_100ml
   m_TagString: Untagged
@@ -860,3 +883,21 @@ MonoBehaviour:
   _rigidbody: {fileID: 915923158516611403}
   _kinematicWhileSelected: 1
   _throwWhenUnselected: 1
+--- !u!114 &3888500437201154115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7528109225136422647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 769115a61ca5e7140ba4bce11591b734, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ChemicalContainer
+  chemicalName: Water
+  maxVolume: 250
+  currentVolume: 0
+  chemicalType: 0
+  fillPercentage: 0
+  liquidVolume: {fileID: 156410993814781755}

@@ -8,6 +8,15 @@ public class ChemicalContainer : MonoBehaviour
     public float maxVolume = 250f;
     public float currentVolume = 0f;
 
+    [SerializeField]
+    private ChemicalType chemicalType = ChemicalType.Water;
+    public ChemicalType ChemicalType
+    {
+        get { return chemicalType; }
+        set { chemicalType = value; }
+    }
+
+
     [Range(0f, 1f)]
     public float fillPercentage;
 
@@ -30,6 +39,11 @@ public class ChemicalContainer : MonoBehaviour
             fillPercentage = Mathf.Clamp01(liquidVolume.level);
             currentVolume = fillPercentage * maxVolume;
         }
+    }
+
+    public void mix(ChemicalType chemicalType)
+    {
+        UnityEngine.Debug.Log(chemicalType.ToString() + " added to " + this.chemicalType.ToString());
     }
 
 }

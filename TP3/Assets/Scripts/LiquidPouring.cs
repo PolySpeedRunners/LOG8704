@@ -16,11 +16,22 @@ public class LiquidPouring : MonoBehaviour
     }
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Liquid"))
+        if (!other.CompareTag("Liquid")) return;
+
+        DropletMetadata droplet = other.GetComponent<DropletMetadata>();
+        if (droplet != null)
         {
-            if (lv.level < 1f)
-                lv.level += fillSpeed;
-                Destroy(other.gameObject);
+            ChemicalContainer container = GetComponentInParent<ChemicalContainer>();
+            if (container != null)
+            {
+                container.mix(droplet.Chemical);
+            }
         }
+
+
+        if (lv.level < 1f)
+            lv.level += fillSpeed;
+
+        Destroy(other.gameObject);
     }
 }
