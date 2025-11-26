@@ -7,9 +7,8 @@ public enum ChemicalType
 {
     Water,
     PVA,
-    AceticAcid,
-    Benzene,
-    Acetone,
+    PVA_Decomposed,
+    PVA_Black,
 }
 
 [CreateAssetMenu(menuName = "Chemistry/Chemical Definition")]

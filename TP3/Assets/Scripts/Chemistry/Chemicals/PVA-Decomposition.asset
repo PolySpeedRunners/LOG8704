@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4fc11bd3e8d5b864abee81266a85b585, type: 3}
-  m_Name: AceticAcid
+  m_Name: PVA-Decomposition
   m_EditorClassIdentifier: Assembly-CSharp::ChemicalDefinition
   type: 2
   color: {r: 0.20754719, g: 0.122583605, b: 0, a: 0}
