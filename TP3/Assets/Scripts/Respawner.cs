@@ -14,7 +14,6 @@ public class Respawner : MonoBehaviour
 
     public void OnGrab()
     {
-        UnityEngine.Debug.Log("adj has been grabbed");
         Rigidbody rb = GetComponent<Rigidbody>();
         if (rb != null)
         {
@@ -24,20 +23,17 @@ public class Respawner : MonoBehaviour
 
         if (!hasBeenGrabbedOnce)
         {
-            GameObject clone = Instantiate(gameObject, originalPosition, originalRotation);
+            hasBeenGrabbedOnce = true;
 
-            // Réinitialiser le clone pour qu'il ne soit pas "grabbed"
+            GameObject clone = Instantiate(gameObject, originalPosition, originalRotation);
             Rigidbody cloneRb = clone.GetComponent<Rigidbody>();
             if (cloneRb != null)
             {
                 cloneRb.useGravity = false;
                 cloneRb.isKinematic = true;
             }
-
             Respawner r = clone.GetComponent<Respawner>();
             r.hasBeenGrabbedOnce = false;
-
-            hasBeenGrabbedOnce = true;
         }
     }
 }
