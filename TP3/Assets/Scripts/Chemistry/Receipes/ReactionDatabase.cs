@@ -14,20 +14,17 @@ public class ReactionDatabase : ScriptableObject
 
         foreach (var r in reactions)
         {
-            // --- Check reactants exist ---
-            if (r.reactants.Any(req => !container.contents.ContainsKey(req.type)))
-                continue;
+            // --- Check reactants exist in container ---
+            bool allReactantsExist = r.reactants.All(req =>
+                container.contents.Any(c => c.type == req.type && c.volume > 0f));
+            if (!allReactantsExist) continue;
 
             // --- Check prerequisites ---
-            if (r.requireHeatSource && !container.hasHeatSource)
-                continue;
+            if (r.requireHeatSource && !container.hasHeatSource) continue;
+            if (r.requireVacuum && !container.isVacuum) continue;
 
-            if (r.requireVacuum && !container.isVacuum)
-                continue;
-
-            // --- Check temperature within margin ---
-            float tempDiff = Mathf.Abs(container.currentTemperature - r.targetTemperature);
-            if (tempDiff > r.temperatureMargin)
+            // --- Check temperature (only minimum required) ---
+            if (container.currentTemperature < r.targetTemperature - r.temperatureMargin)
                 continue;
 
             recipe = r;
@@ -36,4 +33,5 @@ public class ReactionDatabase : ScriptableObject
 
         return false;
     }
+
 }

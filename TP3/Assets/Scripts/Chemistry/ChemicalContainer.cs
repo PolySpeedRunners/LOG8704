@@ -27,13 +27,13 @@ public class SparklingSettings
     public float temperatureEnd = 100f;
 
     [Header("Turbulence Settings")]
-    public float turbulence1Step = 0.7123f; // max change per update for turbulence1
-    public float turbulence1Start = 0f;  // min value for turbulence1
-    public float turbulence1End = 1f;    // max value for turbulence1
+    public float turbulence1Step = 0.7123f;
+    public float turbulence1Start = 0f;
+    public float turbulence1End = 1f;
 
     [Header("Foam Settings")]
-    public float foamDensityStart = 0.0f; // max change per update for turbulence1
-    public float foamDensityEnd = 0.022f; // max change per update for turbulence1
+    public float foamDensityStart = 0.0f;
+    public float foamDensityEnd = 0.022f;
 
     public float foamThicknessStart = 0f;
     public float foamThicknessEnd = 0.3f;
@@ -48,48 +48,39 @@ public class ChemicalContainer : MonoBehaviour
     [SerializeField] private LiquidVolume liquidVolume;
     [SerializeField] private float fillSpeed = 0.01f;
     [SerializeField] private float ambientTemperature = 25f;
-    [SerializeField] private float temperatureDecayRate = 1f; // °C per second
+    [SerializeField] private float temperatureDecayRate = 1f;
     [SerializeField] private float reactionInterval = 0.1f;
 
     [Header("Chemical Data")]
     [SerializeField] private ChemicalDatabase chemicalData;
     [SerializeField] private ReactionDatabase reactionData;
-    [SerializeField] private List<ChemicalAmount> defaultContents = new();
+    [SerializeField] public List<ChemicalAmount> contents = new();
 
     [Header("Sparkling Settings")]
     [SerializeField] private SparklingSettings sparkling;
 
-    public Dictionary<ChemicalType, float> contents = new();
     private Color currentColor;
     private float reactionTimer = 0f;
 
-    public float totalVolume => contents.Values.Sum();
+    public float totalVolume => contents.Sum(c => c.volume);
     public float currentTemperature = 25f;
     public bool hasHeatSource = false;
     public bool isVacuum = false;
 
-
     private void Awake()
     {
-        LoadDefaultContents();
         currentColor = ComputeBlendedColor();
         if (liquidVolume != null)
         {
-
-            // Sparkling defaults
             liquidVolume.sparklingAmount = sparkling.baseAmount;
             liquidVolume.sparklingIntensity = sparkling.baseIntensity;
             liquidVolume.speed = sparkling.baseSpeed;
 
-            // Turbulence defaults
             liquidVolume.turbulence1 = sparkling.turbulence1Start;
-
-            // Foam defaults
             liquidVolume.foamDensity = sparkling.foamDensityStart;
             liquidVolume.foamScale = sparkling.foamScale;
             liquidVolume.foamThickness = sparkling.foamThicknessStart;
             liquidVolume.foamTurbulence = sparkling.foamTurbulence;
-
             liquidVolume.requireBubblesUpdate = true;
         }
 
@@ -98,17 +89,12 @@ public class ChemicalContainer : MonoBehaviour
 
     private void Update()
     {
-        // Temperature decay
         if (!hasHeatSource)
             currentTemperature = Mathf.MoveTowards(currentTemperature, ambientTemperature, temperatureDecayRate * Time.deltaTime);
 
-        // Visual
         UpdateVisual();
-
-        // Sparkling effect
         UpdateSparkling();
 
-        // Reactions at fixed intervals
         reactionTimer += Time.deltaTime;
         if (reactionTimer >= reactionInterval)
         {
@@ -117,38 +103,25 @@ public class ChemicalContainer : MonoBehaviour
         }
     }
 
-    private void LoadDefaultContents()
-    {
-        contents = defaultContents.ToDictionary(c => c.type, c => c.volume);
-
-        float total = totalVolume;
-        if (total > maxVolume)
-        {
-            float scale = maxVolume / total;
-            foreach (var key in contents.Keys.ToList())
-                contents[key] *= scale;
-        }
-    }
-
     private Color ComputeBlendedColor()
     {
         if (contents.Count == 0) return Color.black;
 
         float total = totalVolume;
-        var dominant = contents.OrderByDescending(kvp => kvp.Value).First();
-        Color dominantColor = chemicalData.Get(dominant.Key).color;
+        var dominant = contents.OrderByDescending(c => c.volume).First();
+        Color dominantColor = chemicalData.Get(dominant.type).color;
 
         Color secondaryBlend = Color.black;
         float secondaryWeight = 0f;
 
-        foreach (var kvp in contents)
+        foreach (var c in contents)
         {
-            if (kvp.Key == dominant.Key) continue;
-            float ratio = kvp.Value / total;
+            if (c.type == dominant.type) continue;
+            float ratio = c.volume / total;
             if (ratio < 0.03f) continue;
 
             float weight = Mathf.Pow(ratio, 1.6f);
-            secondaryBlend += chemicalData.Get(kvp.Key).color * weight;
+            secondaryBlend += chemicalData.Get(c.type).color * weight;
             secondaryWeight += weight;
         }
 
@@ -166,125 +139,154 @@ public class ChemicalContainer : MonoBehaviour
 
         if (contents.Count == 0)
         {
-            // Optional: show transparent liquid instead of black
             liquidVolume.liquidColor1 = new Color(1f, 1f, 1f, 0f);
             liquidVolume.liquidColor2 = new Color(1f, 1f, 1f, 0f);
             return;
         }
 
         Color targetColor = ComputeBlendedColor();
-
-        // Smooth transition
         currentColor = Color.Lerp(currentColor, targetColor, Time.deltaTime * 3f);
 
-        // Keep alpha = 1, adjust brightness with intensity
         float brightness = Mathf.Lerp(0.6f, 1f, Mathf.Clamp01(totalVolume / maxVolume));
         Color finalColor = new Color(
             currentColor.r * brightness,
             currentColor.g * brightness,
             currentColor.b * brightness,
-            1f // alpha always 1 so LVFX shows the color
+            1f
         );
 
         liquidVolume.liquidColor1 = finalColor;
         liquidVolume.liquidColor2 = finalColor;
     }
 
+    private ChemicalAmount GetChemical(ChemicalType type)
+    {
+        return contents.FirstOrDefault(c => c.type == type);
+    }
 
-    public void AddLiquid(Dictionary<ChemicalType, float> addedContents)
+    // ---------------- Updated Methods ----------------
+
+    public void AddLiquid(List<ChemicalAmount> addedContents)
     {
         if (addedContents == null || addedContents.Count == 0) return;
 
-        float incomingVolume = addedContents.Values.Sum();
+        float incomingVolume = addedContents.Sum(c => c.volume);
         float availableSpace = maxVolume - totalVolume;
         if (availableSpace <= 0f) return;
 
-        float scale = 1f;
-        if (incomingVolume > availableSpace)
-            scale = availableSpace / incomingVolume;
+        float scale = incomingVolume > availableSpace ? availableSpace / incomingVolume : 1f;
 
-        foreach (var kvp in addedContents)
+        foreach (var chem in addedContents)
         {
-            if (!contents.ContainsKey(kvp.Key))
-                contents[kvp.Key] = 0f;
-            contents[kvp.Key] += kvp.Value * scale;
+            var existing = GetChemical(chem.type);
+            if (existing == null)
+                contents.Add(new ChemicalAmount { type = chem.type, volume = chem.volume * scale });
+            else
+                existing.volume += chem.volume * scale;
         }
 
         TryReact();
         UpdateVisual();
     }
 
-    public Dictionary<ChemicalType, float> TakeProportional(float amount)
+    public List<ChemicalAmount> TakeProportional(float amount)
     {
         float total = totalVolume;
-        if (total <= 0f) return new Dictionary<ChemicalType, float>();
+        if (total <= 0f) return new List<ChemicalAmount>();
 
-        Dictionary<ChemicalType, float> removed = new();
-        foreach (var key in contents.Keys.ToList())
+        List<ChemicalAmount> removed = new List<ChemicalAmount>();
+
+        foreach (var c in contents.ToList())
         {
-            float ratio = contents[key] / total;
+            float ratio = c.volume / total;
             float take = ratio * amount;
-            contents[key] -= take;
-            removed[key] = take;
+            c.volume -= take;
 
-            if (contents[key] <= 0.0001f)
-                contents.Remove(key);
+            removed.Add(new ChemicalAmount { type = c.type, volume = take });
+
+            if (c.volume <= 0.0001f)
+                contents.Remove(c);
         }
 
         return removed;
     }
+
+    private float currentReactionProgress = 0f;
+    private float totalReactionVolume = 0f;
+    private ReactionRecipe currentReaction = null;
 
     private void TryReact()
     {
         if (reactionData == null || contents.Count == 0) return;
         if (!reactionData.TryFindReaction(this, out ReactionRecipe r)) return;
 
-        float total = totalVolume;
-        if (total <= 0f) return;
-
-        float limitingFactor = float.MaxValue;
-        foreach (var req in r.reactants)
+        // If we started a new reaction, initialize totalReactionVolume
+        if (currentReaction != r)
         {
-            float have = contents[req.type];
-            float requiredAmount = total * req.ratio;
-            limitingFactor = Mathf.Min(limitingFactor, have / requiredAmount);
-        }
-        if (limitingFactor <= 0f) return;
+            currentReaction = r;
+            currentReactionProgress = 0f;
 
-        float tempDiff = Mathf.Abs(currentTemperature - r.targetTemperature);
-        float tempFactor = Mathf.Clamp01(1f - tempDiff / r.temperatureMargin);
+            // --- Identify limiting reactant ONCE ---
+            totalReactionVolume = float.MaxValue;
+            foreach (var req in r.reactants)
+            {
+                var chem = GetChemical(req.type);
+                if (chem == null) { totalReactionVolume = 0f; break; }
 
-        float reactionStep = r.reactionRate * Time.deltaTime * tempFactor;
-        float actualProgress = Mathf.Min(reactionStep, limitingFactor);
-        if (actualProgress <= 0f) return;
-
-        foreach (var req in r.reactants)
-        {
-            float amountToRemove = total * req.ratio * actualProgress;
-            contents[req.type] -= amountToRemove;
-            if (contents[req.type] <= 0.0001f)
-                contents.Remove(req.type);
+                float possible = chem.volume / req.ratio;
+                if (possible < totalReactionVolume)
+                    totalReactionVolume = possible;
+            }
+            if (totalReactionVolume <= 0f)
+            {
+                currentReaction = null;
+                return;
+            }
         }
 
+        // --- Temperature factor ---
+        float minTemp = r.targetTemperature - r.temperatureMargin;
+        float tempFactor = currentTemperature < minTemp
+            ? Mathf.Clamp01(currentTemperature / minTemp)
+            : 1f;
+
+        // --- Reaction progress this frame ---
+        float fractionThisFrame = (Time.deltaTime / r.reactionDuration) * tempFactor;
+        currentReactionProgress += fractionThisFrame;
+        if (currentReactionProgress > 1f) fractionThisFrame -= currentReactionProgress - 1f; // clamp final fraction
+
+        float reactionVolume = totalReactionVolume * fractionThisFrame;
+        if (reactionVolume <= 0f) return;
+
+        // --- Consume reactants proportionally ---
+        foreach (var req in r.reactants)
+        {
+            var chem = GetChemical(req.type);
+            if (chem == null) continue;
+
+            chem.volume -= req.ratio * reactionVolume;
+            if (chem.volume <= 0.0001f)
+                contents.Remove(chem);
+        }
+
+        // --- Produce products proportionally ---
         foreach (var prod in r.products)
         {
-            float amountToAdd = total * prod.ratio * actualProgress;
-            if (!contents.ContainsKey(prod.type)) contents[prod.type] = 0f;
-            contents[prod.type] += amountToAdd;
+            var chem = GetChemical(prod.type);
+            float produceAmount = prod.ratio * reactionVolume;
+
+            if (chem == null)
+                contents.Add(new ChemicalAmount { type = prod.type, volume = produceAmount });
+            else
+                chem.volume += produceAmount;
         }
 
-        CleanSmallEntries();
-    }
+        contents.RemoveAll(c => c.volume <= 0.0001f);
 
-    private void CleanSmallEntries()
-    {
-        foreach (var key in contents.Keys.ToList())
-        {
-            if (contents[key] <= 0.0001f)
-                contents.Remove(key);
-        }
+        // --- Reaction finished ---
+        if (currentReactionProgress >= 1f)
+            currentReaction = null;
     }
-
 
     private void UpdateSparkling()
     {
@@ -295,13 +297,11 @@ public class ChemicalContainer : MonoBehaviour
 
         if (currentTemperature < threshold)
         {
-            // Reset all to base values
             liquidVolume.sparklingAmount = Mathf.Clamp01(sparkling.baseAmount);
             liquidVolume.sparklingIntensity = Mathf.Clamp01(sparkling.baseIntensity);
             liquidVolume.speed = Mathf.Clamp01(sparkling.baseSpeed);
 
             liquidVolume.turbulence1 = 0.4f;
-
             liquidVolume.foamDensity = Mathf.Clamp01(sparkling.foamDensityStart);
             liquidVolume.foamScale = Mathf.Clamp01(sparkling.foamScale);
             liquidVolume.foamThickness = Mathf.Clamp01(sparkling.foamThicknessStart);
@@ -311,22 +311,18 @@ public class ChemicalContainer : MonoBehaviour
             return;
         }
 
-        // Normalized temperature factor
         float t = Mathf.InverseLerp(threshold, maxTemp, currentTemperature);
         t = Mathf.Clamp01(t);
 
-        // Sparkling properties (clamped)
         liquidVolume.sparklingAmount = Mathf.Clamp01(Mathf.Lerp(sparkling.baseAmount, sparkling.maxAmount, t));
         liquidVolume.sparklingIntensity = Mathf.Clamp01(Mathf.Lerp(sparkling.baseIntensity, sparkling.maxIntensity, t));
         liquidVolume.speed = Mathf.Clamp01(Mathf.Lerp(sparkling.baseSpeed, sparkling.maxSpeed, t));
 
-        // Foam properties (clamped)
         liquidVolume.foamDensity = Mathf.Clamp01(Mathf.Lerp(Mathf.Max(0f, sparkling.foamDensityStart),
                                                            Mathf.Max(0f, sparkling.foamDensityEnd), t));
         liquidVolume.foamThickness = Mathf.Clamp01(Mathf.Lerp(sparkling.foamThicknessStart, sparkling.foamThicknessEnd, t));
         liquidVolume.foamTurbulence = Mathf.Clamp01(Mathf.Lerp(sparkling.foamTurbulence, 0.7f, t));
 
-        // Turbulence oscillation between 0.4 and 0.7 (safe)
         float turbulenceMin = 0.4f;
         float turbulenceMax = 0.7f;
         float oscillationSpeed = Mathf.Lerp(10f, 40f, t);
@@ -335,8 +331,4 @@ public class ChemicalContainer : MonoBehaviour
 
         liquidVolume.requireBubblesUpdate = true;
     }
-
-
-
-
 }

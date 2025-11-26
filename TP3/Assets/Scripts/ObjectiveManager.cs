@@ -8,7 +8,7 @@ public class QuestObjectiveManager : MonoBehaviour
     [SerializeField]
     private float ratioToWin = 0.5f;
 
-    // [System.Serializable]
+    [System.Serializable]
     public class ReactionGoal
     {
         public ReactionRecipe recipe;
@@ -30,15 +30,17 @@ public class QuestObjectiveManager : MonoBehaviour
 
         foreach (ReactionRecipe reaction in database.reactions)
         {
-            ReactionGoal goal = new ReactionGoal();
-            goal.recipe = reaction;
-            goal.completed = false;
+            ReactionGoal goal = new ReactionGoal
+            {
+                recipe = reaction,
+                completed = false
+            };
 
             objectives.Add(goal);
         }
     }
 
-    private bool validateReaction(List<ChemicalRatio> products, ChemicalType contentType)
+    private bool ValidateReaction(List<ChemicalRatio> products, ChemicalType contentType)
     {
         foreach (ChemicalRatio reaction in products)
         {
@@ -47,32 +49,36 @@ public class QuestObjectiveManager : MonoBehaviour
         }
         return false;
     }
+
     public void CheckContainer(ChemicalContainer c)
     {
         foreach (var obj in objectives)
         {
-            foreach (KeyValuePair<ChemicalType, float> content in c.contents)
+            if (obj.completed) continue;
+
+            foreach (ChemicalAmount content in c.contents)
             {
-                if (!obj.completed && validateReaction(obj.recipe.products, content.Key))
+                if (ValidateReaction(obj.recipe.products, content.type))
                 {
                     obj.completed = true;
 
-                    // Debug.Log($"Objectif complété : {obj.chemA} + {obj.chemB}");
+                    // Optional debug
+                    // Debug.Log($"Objective completed for {content.type}");
 
-                    // Mise à jour du billboard
+                    // Update the billboard UI if it exists
                     if (BillboardUI.Instance != null)
                         BillboardUI.Instance.Refresh();
 
-                    return;
+                    return; // Stop after the first valid reaction
                 }
             }
         }
-        foreach (var kvp in c.contents)
+
+        // Debugging: show what chemicals are in the container
+        foreach (var content in c.contents)
         {
-            Debug.Log($"[DEBUG] contient : {kvp.Key} = {kvp.Value}");
+            Debug.Log($"[DEBUG] contains: {content.type} = {content.volume}");
         }
-        Debug.Log("Aucun objectif validé par cet objet.");
+        Debug.Log("No objective was validated by this container.");
     }
-
-
 }

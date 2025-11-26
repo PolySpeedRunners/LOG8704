@@ -24,12 +24,10 @@ public class LiquidSpill : MonoBehaviour
         {
             GameObject oneSpill = Instantiate(spill);
 
-            // Size + color
             oneSpill.transform.localScale *= Random.Range(0.45f, 0.65f);
             oneSpill.GetComponent<Renderer>().material.color =
                 Color.Lerp(lv.liquidColor1, lv.liquidColor2, Random.value);
 
-            // Collider
             if (oneSpill.GetComponent<Collider>() == null)
             {
                 SphereCollider col = oneSpill.AddComponent<SphereCollider>();
@@ -37,16 +35,12 @@ public class LiquidSpill : MonoBehaviour
                 col.isTrigger = true;
             }
 
-            // Rigidbody
             if (oneSpill.GetComponent<Rigidbody>() == null)
                 oneSpill.AddComponent<Rigidbody>();
 
-            // Tag droplets
             oneSpill.tag = "Liquid";
 
-            // Metadata component
             oneSpill.AddComponent<DropletMetadata>();
-
             oneSpill.SetActive(false);
             dropTemplates[k] = oneSpill;
         }
@@ -54,46 +48,40 @@ public class LiquidSpill : MonoBehaviour
 
     void FixedUpdate()
     {
-        Vector3 spillPos;
-        float spillAmount;
-
-        if (lv.GetSpillPoint(out spillPos, out spillAmount))
+        if (lv.GetSpillPoint(out Vector3 spillPos, out float spillAmount))
         {
             const int drops = 2;
 
-            // Convert spillAmount (0–1) to ml based on container's maxVolume
             float mlSpilled = spillAmount * container.maxVolume * 0.1f;
             if (mlSpilled < 0.1f) mlSpilled = 0.1f;
 
-            // Take proportional chemical amounts from container
-            Dictionary<ChemicalType, float> removed = container.TakeProportional(mlSpilled);
+            // Take proportional chemical amounts from container (List version)
+            List<ChemicalAmount> removed = container.TakeProportional(mlSpilled);
 
             for (int k = 0; k < drops; k++)
             {
-                GameObject oneSpill =
-                    Instantiate(dropTemplates[Random.Range(0, DROP_TEMPLATES_COUNT)]);
+                GameObject oneSpill = Instantiate(dropTemplates[Random.Range(0, DROP_TEMPLATES_COUNT)]);
                 oneSpill.SetActive(true);
 
                 Rigidbody rb = oneSpill.GetComponent<Rigidbody>();
                 DropletMetadata meta = oneSpill.GetComponent<DropletMetadata>();
 
-                // Assign the chemical contents to the droplet
-                meta.contents = new Dictionary<ChemicalType, float>(removed);
+                // Assign chemical contents to droplet
+                meta.contents = new List<ChemicalAmount>();
+                foreach (var chem in removed)
+                {
+                    meta.contents.Add(new ChemicalAmount
+                    {
+                        type = chem.type,
+                        volume = chem.volume
+                    });
+                }
 
-                // Position + small random offset
                 rb.position = spillPos + Random.insideUnitSphere * 0.01f;
-
-                // Randomized initial force
-                rb.AddForce(new Vector3(
-                    Random.value - 0.5f,
-                    Random.value * 0.1f - 0.2f,
-                    Random.value - 0.5f
-                ));
+                rb.AddForce(new Vector3(Random.value - 0.5f, Random.value * 0.1f - 0.2f, Random.value - 0.5f));
 
                 StartCoroutine(DestroySpill(oneSpill));
             }
-
-            // NO manual lv.level change here — container handles visual
         }
     }
 

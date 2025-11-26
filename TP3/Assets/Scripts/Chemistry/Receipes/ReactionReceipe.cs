@@ -17,8 +17,9 @@ public class ReactionRecipe : ScriptableObject
     public List<ChemicalRatio> reactants = new();
     public List<ChemicalRatio> products = new();
 
+    [Tooltip("Time in seconds for full conversion if ratios allow")]
     [Range(0.01f, 10f)]
-    public float reactionRate = 1f; // 1f = full conversion in 1 second if ratios allow
+    public float reactionDuration = 1f; // new: full reaction duration
 
     // Optional prerequisites
     public bool requireHeatSource = false;

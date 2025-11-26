@@ -8,6 +8,7 @@ public class ResultDisplay : MonoBehaviour
 
     [Header("UI Reference")]
     public TMP_Text resultText;
+
     void Awake()
     {
         Instance = this;
@@ -21,14 +22,16 @@ public class ResultDisplay : MonoBehaviour
 
     public void CheckUpdate(ChemicalContainer c)
     {
+        if (resultText == null) return;
+
         StringBuilder sb = new StringBuilder();
 
         if (c != null)
         {
-            foreach (var kvp in c.contents)
+            foreach (var chem in c.contents)
             {
-                ChemicalType type = kvp.Key;
-                float volume = kvp.Value;
+                ChemicalType type = chem.type;
+                float volume = chem.volume;
 
                 sb.AppendLine($"{type}: {volume:0.0} mL");
             }

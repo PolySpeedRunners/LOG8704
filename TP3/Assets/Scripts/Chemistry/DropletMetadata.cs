@@ -5,5 +5,5 @@ using UnityEngine;
 public class DropletMetadata : MonoBehaviour
 {
     [SerializeField]
-    public Dictionary<ChemicalType, float> contents;
+    public List<ChemicalAmount> contents;
 }

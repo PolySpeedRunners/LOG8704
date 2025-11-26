@@ -14,12 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ReactionRecipe
   reactants:
   - type: 1
-    ratio: 0
+    ratio: 1
   products:
   - type: 2
-    ratio: 0.87648726
+    ratio: 0.87
   - type: 3
-    ratio: 0.061730694
+    ratio: 0.06
   - type: 4
-    ratio: 0.061782014
+    ratio: 0.028
   reactionRate: 1
+  requireHeatSource: 0
+  requireVacuum: 0
+  temperatureMargin: 5
+  targetTemperature: 50
