@@ -66,6 +66,8 @@ public class ChemicalContainer : MonoBehaviour
     public float currentTemperature = 25f;
     public bool hasHeatSource = false;
     public bool isVacuum = false;
+    public float heatIncreaseRate = 4f;
+
 
     private void Awake()
     {
@@ -89,8 +91,18 @@ public class ChemicalContainer : MonoBehaviour
 
     private void Update()
     {
-        if (!hasHeatSource)
-            currentTemperature = Mathf.MoveTowards(currentTemperature, ambientTemperature, temperatureDecayRate * Time.deltaTime);
+        if (hasHeatSource)
+        {
+            currentTemperature += heatIncreaseRate * Time.deltaTime;
+        }
+        else
+        {
+            currentTemperature = Mathf.MoveTowards(
+                currentTemperature,
+                ambientTemperature,
+                temperatureDecayRate * Time.deltaTime
+            );
+        }
 
         UpdateVisual();
         UpdateSparkling();
