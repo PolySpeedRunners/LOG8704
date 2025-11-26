@@ -230,8 +230,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c55cdc0945eadde459e94a2001af413b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LiquidPouring
-  fillSpeed: 0.01
-  sinkFactor: 0.1
 --- !u!1 &7507196535034985534
 GameObject:
   m_ObjectHideFlags: 0
@@ -814,9 +812,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 769115a61ca5e7140ba4bce11591b734, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChemicalContainer
-  chemicalName: Water
   maxVolume: 250
-  currentVolume: 0
-  chemicalType: 0
-  fillPercentage: 0
   liquidVolume: {fileID: 156410993814781755}
+  fillSpeed: 0.01
+  database: {fileID: 11400000, guid: c38dbf40bb456b843907a0509617d91d, type: 2}
+  defaultContents: []
