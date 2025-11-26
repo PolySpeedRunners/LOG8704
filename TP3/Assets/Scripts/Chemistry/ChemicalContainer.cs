@@ -27,13 +27,18 @@ public class SparklingSettings
     public float temperatureEnd = 100f;
 
     [Header("Turbulence Settings")]
-    public float turbulence1Step = 2.7f; // max change per update for turbulence1
+    public float turbulence1Step = 0.7123f; // max change per update for turbulence1
     public float turbulence1Start = 0f;  // min value for turbulence1
     public float turbulence1End = 1f;    // max value for turbulence1
 
-    public float turbulence2Step = 0.01f; // max change per update for turbulence2
-    public float turbulence2Start = 0.0f;  // min value for turbulence2
-    public float turbulence2End = 0.1f;      // max value for turbulence2
+    [Header("Foam Settings")]
+    public float foamDensityStart = 0.0f; // max change per update for turbulence1
+    public float foamDensityEnd = 0.022f; // max change per update for turbulence1
+
+    public float foamThicknessStart = 0f;
+    public float foamThicknessEnd = 0.3f;
+    public float foamScale = 0.714f;
+    public float foamTurbulence = 0.5f;
 }
 
 public class ChemicalContainer : MonoBehaviour
@@ -63,11 +68,31 @@ public class ChemicalContainer : MonoBehaviour
     public bool hasHeatSource = false;
     public bool isVacuum = false;
 
+
     private void Awake()
     {
         LoadDefaultContents();
         currentColor = ComputeBlendedColor();
-        turbulence2Value = sparkling.turbulence2Start;
+        if (liquidVolume != null)
+        {
+
+            // Sparkling defaults
+            liquidVolume.sparklingAmount = sparkling.baseAmount;
+            liquidVolume.sparklingIntensity = sparkling.baseIntensity;
+            liquidVolume.speed = sparkling.baseSpeed;
+
+            // Turbulence defaults
+            liquidVolume.turbulence1 = sparkling.turbulence1Start;
+
+            // Foam defaults
+            liquidVolume.foamDensity = sparkling.foamDensityStart;
+            liquidVolume.foamScale = sparkling.foamScale;
+            liquidVolume.foamThickness = sparkling.foamThicknessStart;
+            liquidVolume.foamTurbulence = sparkling.foamTurbulence;
+
+            liquidVolume.requireBubblesUpdate = true;
+        }
+
         UpdateVisual();
     }
 
@@ -259,52 +284,57 @@ public class ChemicalContainer : MonoBehaviour
         }
     }
 
-    private float turbulence1Value = 0f;
-    private float turbulence2Value = 0.5f; // starts at 0.5
-    [SerializeField] private float turbulence1Step = 0.1f; // max change per update
-    [SerializeField] private float turbulence2Step = 0.01f; // smaller change per update
 
     private void UpdateSparkling()
     {
         if (liquidVolume == null) return;
 
-        // Only start effects if temperature is above threshold
-        float threshold = 60f; // start effects at 60°C
+        float threshold = sparkling.temperatureStart;
+        float maxTemp = sparkling.temperatureEnd;
+
         if (currentTemperature < threshold)
         {
-            // Optionally reset turbulences to base/start values
-            liquidVolume.turbulence1 = sparkling.turbulence1Start;
-            liquidVolume.turbulence2 = sparkling.turbulence2Start;
-            liquidVolume.sparklingAmount = sparkling.baseAmount;
-            liquidVolume.sparklingIntensity = sparkling.baseIntensity;
-            liquidVolume.speed = sparkling.baseSpeed;
+            // Reset all to base values
+            liquidVolume.sparklingAmount = Mathf.Clamp01(sparkling.baseAmount);
+            liquidVolume.sparklingIntensity = Mathf.Clamp01(sparkling.baseIntensity);
+            liquidVolume.speed = Mathf.Clamp01(sparkling.baseSpeed);
+
+            liquidVolume.turbulence1 = 0.4f;
+
+            liquidVolume.foamDensity = Mathf.Clamp01(sparkling.foamDensityStart);
+            liquidVolume.foamScale = Mathf.Clamp01(sparkling.foamScale);
+            liquidVolume.foamThickness = Mathf.Clamp01(sparkling.foamThicknessStart);
+            liquidVolume.foamTurbulence = Mathf.Clamp01(sparkling.foamTurbulence);
+
             liquidVolume.requireBubblesUpdate = true;
             return;
         }
 
-        // Normalize temperature between threshold and temperatureEnd
-        float t = Mathf.InverseLerp(threshold, sparkling.temperatureEnd, currentTemperature);
+        // Normalized temperature factor
+        float t = Mathf.InverseLerp(threshold, maxTemp, currentTemperature);
         t = Mathf.Clamp01(t);
 
-        // LVFX sparkling properties
-        liquidVolume.sparklingAmount = Mathf.Lerp(sparkling.baseAmount, sparkling.maxAmount, t);
-        liquidVolume.sparklingIntensity = Mathf.Lerp(sparkling.baseIntensity, sparkling.maxIntensity, t);
-        liquidVolume.speed = Mathf.Lerp(sparkling.baseSpeed, sparkling.maxSpeed, t);
+        // Sparkling properties (clamped)
+        liquidVolume.sparklingAmount = Mathf.Clamp01(Mathf.Lerp(sparkling.baseAmount, sparkling.maxAmount, t));
+        liquidVolume.sparklingIntensity = Mathf.Clamp01(Mathf.Lerp(sparkling.baseIntensity, sparkling.maxIntensity, t));
+        liquidVolume.speed = Mathf.Clamp01(Mathf.Lerp(sparkling.baseSpeed, sparkling.maxSpeed, t));
 
-        // Turbulence 1 - gradually change within defined range
-        float dir1 = Random.value > 0.5f ? 1f : -1f;
-        turbulence1Value += dir1 * sparkling.turbulence1Step * t; // scale by temperature factor
-        turbulence1Value = Mathf.Clamp(turbulence1Value, sparkling.turbulence1Start, sparkling.turbulence1End);
-        liquidVolume.turbulence1 = turbulence1Value;
+        // Foam properties (clamped)
+        liquidVolume.foamDensity = Mathf.Clamp01(Mathf.Lerp(Mathf.Max(0f, sparkling.foamDensityStart),
+                                                           Mathf.Max(0f, sparkling.foamDensityEnd), t));
+        liquidVolume.foamThickness = Mathf.Clamp01(Mathf.Lerp(sparkling.foamThicknessStart, sparkling.foamThicknessEnd, t));
+        liquidVolume.foamTurbulence = Mathf.Clamp01(Mathf.Lerp(sparkling.foamTurbulence, 0.7f, t));
 
-        // Turbulence 2 - gradually change within defined range
-        float dir2 = Random.value > 0.5f ? 1f : -1f;
-        turbulence2Value += dir2 * sparkling.turbulence2Step * t; // scale by temperature factor
-        turbulence2Value = Mathf.Clamp(turbulence2Value, sparkling.turbulence2Start, sparkling.turbulence2End);
-        liquidVolume.turbulence2 = turbulence2Value;
+        // Turbulence oscillation between 0.4 and 0.7 (safe)
+        float turbulenceMin = 0.4f;
+        float turbulenceMax = 0.7f;
+        float oscillationSpeed = Mathf.Lerp(10f, 40f, t);
+        liquidVolume.turbulence1 = Mathf.Lerp(turbulenceMin, turbulenceMax, Mathf.PingPong(Time.time * oscillationSpeed, 1f));
+        liquidVolume.foamTurbulence = Mathf.Lerp(turbulenceMin, turbulenceMax, Mathf.PingPong(Time.time * oscillationSpeed, 1f));
 
         liquidVolume.requireBubblesUpdate = true;
     }
+
 
 
 

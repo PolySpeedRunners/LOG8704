@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Chemical Database
   m_EditorClassIdentifier: Assembly-CSharp::ChemicalDatabase
   definitions:
-  - {fileID: 11400000, guid: fcb98e76e5e83344793def1d2f814c5a, type: 2}
-  - {fileID: 11400000, guid: 1d28641abf71e0a45b5229807dae40c2, type: 2}
+  - {fileID: 11400000, guid: 7801d5ceb930f7743803a7d9addd9834, type: 2}
   - {fileID: 11400000, guid: db8732e69b59fe541a41c6ecc1b3af0f, type: 2}
+  - {fileID: 11400000, guid: 8406a8d726cf68b468e6ed5a76b7f718, type: 2}
+  - {fileID: 11400000, guid: c9afee81195f4b4418590e8d02fbc7c5, type: 2}
+  - {fileID: 11400000, guid: ac693df6a2034b64aa4f06fb8f0f3b3f, type: 2}

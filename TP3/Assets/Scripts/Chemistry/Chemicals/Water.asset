@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Water
   m_EditorClassIdentifier: Assembly-CSharp::ChemicalDefinition
   type: 0
-  color: {r: 0, g: 0, b: 0, a: 0}
+  color: {r: 0, g: 0.6075773, b: 1, a: 0}
