@@ -5,15 +5,18 @@ public class QuestObjectiveManager : MonoBehaviour
 {
     public static QuestObjectiveManager Instance;
 
-    [System.Serializable]
+    [SerializeField]
+    private float ratioToWin = 0.5f;
+
+    // [System.Serializable]
     public class ReactionGoal
     {
-        public string chemA;
-        public string chemB;
-        public string result;
+        public ReactionRecipe recipe;
         public bool completed;
     }
 
+    [SerializeField]
+    private ReactionDatabase database;
     public List<ReactionGoal> objectives = new List<ReactionGoal>();
 
     void Awake()
@@ -21,37 +24,47 @@ public class QuestObjectiveManager : MonoBehaviour
         Instance = this;
     }
 
-    public void NotifyReaction(string product)
+    private void Start()
     {
-        foreach (var obj in objectives)
-        {
-            if (obj.result == product && !obj.completed)
-            {
-                obj.completed = true;
-                Debug.Log("Objective completed: " + product);
-            }
-        }
+        objectives.Clear();
 
-        BillboardUI.Instance.Refresh();
+        foreach (ReactionRecipe reaction in database.reactions)
+        {
+            ReactionGoal goal = new ReactionGoal();
+            goal.recipe = reaction;
+            goal.completed = false;
+
+            objectives.Add(goal);
+        }
     }
 
+    private bool validateReaction(List<ChemicalRatio> products, ChemicalType contentType)
+    {
+        foreach (ChemicalRatio reaction in products)
+        {
+            if (reaction.type == contentType)
+                return true;
+        }
+        return false;
+    }
     public void CheckContainer(ChemicalContainer c)
     {
         foreach (var obj in objectives)
         {
-            if (!obj.completed && c.contents.ContainsKey(ChemicalType.AceticAcid))
-               // c.contents.ContainsKey(obj.chemA) &&
-               // c.contents.ContainsKey(obj.chemB))
+            foreach (KeyValuePair<ChemicalType, float> content in c.contents)
             {
-                obj.completed = true;
+                if (!obj.completed && validateReaction(obj.recipe.products, content.Key))
+                {
+                    obj.completed = true;
 
-                Debug.Log($"Objectif complété : {obj.chemA} + {obj.chemB}");
+                    // Debug.Log($"Objectif complété : {obj.chemA} + {obj.chemB}");
 
-                // Mise à jour du billboard
-                if (BillboardUI.Instance != null)
-                    BillboardUI.Instance.Refresh();
+                    // Mise à jour du billboard
+                    if (BillboardUI.Instance != null)
+                        BillboardUI.Instance.Refresh();
 
-                return;
+                    return;
+                }
             }
         }
         foreach (var kvp in c.contents)
@@ -60,4 +73,6 @@ public class QuestObjectiveManager : MonoBehaviour
         }
         Debug.Log("Aucun objectif validé par cet objet.");
     }
+
+
 }

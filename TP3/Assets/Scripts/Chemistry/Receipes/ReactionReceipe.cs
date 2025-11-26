@@ -28,5 +28,3 @@ public class ReactionRecipe : ScriptableObject
     public float temperatureMargin = 5f; 
     public float targetTemperature = 25f; // ideal temp for this reaction
 }
-
-

@@ -210,7 +210,8 @@ public class ChemicalContainer : MonoBehaviour
             contents[kvp.Key] += kvp.Value * scale;
         }
 
-        QuestObjectiveManager.Instance.NotifyReaction("@Coronaxus help me out here what do i display");
+        TryReact();
+        UpdateVisual();
     }
 
     public Dictionary<ChemicalType, float> TakeProportional(float amount)
