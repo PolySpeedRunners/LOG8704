@@ -7,7 +7,7 @@ public class Heater : MonoBehaviour
         ChemicalContainer container = other.GetComponentInParent<ChemicalContainer>();
         if (container == null)
             return;
-        container.liquidVolume.finalAlphaMultiplier = 0.5f;
+        //container.liquidVolume.finalAlphaMultiplier = 0.5f;
         
     }
 }

@@ -7,43 +7,29 @@ public class ReactionDatabase : ScriptableObject
 {
     public List<ReactionRecipe> reactions = new();
 
-    public bool TryFindReaction(
-        Dictionary<ChemicalType, float> contents,
-        out ReactionRecipe recipe)
+    public bool TryFindReaction(ChemicalContainer container, out ReactionRecipe recipe)
     {
         recipe = null;
-
-        // Cannot react with no chemicals
-        if (contents.Count == 0)
-            return false;
-
-        float total = contents.Values.Sum();
-        if (total <= 0f)
-            return false;
+        if (container.contents.Count == 0) return false;
 
         foreach (var r in reactions)
         {
-            // === RULE 1: All required reactants must exist ===
-            bool missingIngredient = r.reactants.Any(req => !contents.ContainsKey(req.type));
-            if (missingIngredient)
+            // --- Check reactants exist ---
+            if (r.reactants.Any(req => !container.contents.ContainsKey(req.type)))
                 continue;
 
-            // === RULE 2: Each reactant must meet ratio requirement ===
-            bool insufficientRatio = r.reactants.Any(req =>
-            {
-                float ratio = contents[req.type] / total;
-                return ratio < req.ratio;
-            });
-
-            if (insufficientRatio)
+            // --- Check prerequisites ---
+            if (r.requireHeatSource && !container.hasHeatSource)
                 continue;
 
-            // === RULE 3: No extra reactants that are not part of this recipe ===
-            bool hasExtraReactants = contents.Keys.Any(k => !r.reactants.Any(i => i.type == k));
-            if (hasExtraReactants)
+            if (r.requireVacuum && !container.isVacuum)
                 continue;
 
-            // Reaction found!
+            // --- Check temperature within margin ---
+            float tempDiff = Mathf.Abs(container.currentTemperature - r.targetTemperature);
+            if (tempDiff > r.temperatureMargin)
+                continue;
+
             recipe = r;
             return true;
         }
