@@ -67,18 +67,14 @@ public class ChemicalContainer : MonoBehaviour
     {
         if (liquidVolume != null)
         {
-            // Update fill level
             liquidVolume.level = totalVolume / maxVolume;
 
             if (contents.Count > 0)
             {
-                // Compute target blended color
                 Color targetColor = ComputeBlendedColor();
 
-                // Smoothly lerp from currentColor to targetColor
                 currentColor = Color.Lerp(currentColor, targetColor, Time.deltaTime * colorLerpSpeed);
 
-                // Apply to LiquidVolumeFX
                 liquidVolume.liquidColor1 = currentColor;
                 liquidVolume.liquidColor2 = currentColor;
             }
@@ -114,6 +110,7 @@ public class ChemicalContainer : MonoBehaviour
 
         TryReact();
         UpdateVisual();
+        QuestObjectiveManager.Instance.NotifyReaction("@Coronaxus help me out here what do i display");
     }
 
     // Remove a proportional amount of liquid
