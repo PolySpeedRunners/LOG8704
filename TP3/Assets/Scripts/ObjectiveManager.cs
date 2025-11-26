@@ -8,14 +8,15 @@ public class QuestObjectiveManager : MonoBehaviour
     [SerializeField]
     private float ratioToWin = 0.5f;
 
-    [System.Serializable]
+    // [System.Serializable]
     public class ReactionGoal
     {
-        public List<ChemicalType> reactants;
-        public ChemicalType result;
+        public ReactionRecipe recipe;
         public bool completed;
     }
 
+    [SerializeField]
+    private ReactionDatabase database;
     public List<ReactionGoal> objectives = new List<ReactionGoal>();
 
     void Awake()
@@ -23,22 +24,36 @@ public class QuestObjectiveManager : MonoBehaviour
         Instance = this;
     }
 
-    //private bool verifyContent(ReactionGoal reaction, ChemicalType product)
-    //{
-    //    if (products.Contains(reaction.result))
-    //    {
-    //        return true;
-    //    }
-    //    return false;
-    //}
+    private void Start()
+    {
+        objectives.Clear();
 
+        foreach (ReactionRecipe reaction in database.reactions)
+        {
+            ReactionGoal goal = new ReactionGoal();
+            goal.recipe = reaction;
+            goal.completed = false;
+
+            objectives.Add(goal);
+        }
+    }
+
+    private bool validateReaction(List<ChemicalRatio> products, ChemicalType contentType)
+    {
+        foreach (ChemicalRatio reaction in products)
+        {
+            if (reaction.type == contentType)
+                return true;
+        }
+        return false;
+    }
     public void CheckContainer(ChemicalContainer c)
     {
         foreach (var obj in objectives)
         {
             foreach (KeyValuePair<ChemicalType, float> content in c.contents)
             {
-                if (!obj.completed && obj.result == content.Key)//verifyContent(obj, content.Key)) // this should be replaced by a function callin chemicalcontainer maybe?
+                if (!obj.completed && validateReaction(obj.recipe.products, content.Key))
                 {
                     obj.completed = true;
 

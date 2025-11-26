@@ -24,7 +24,7 @@ public class BillboardUI : MonoBehaviour
 
         foreach (var obj in QuestObjectiveManager.Instance.objectives)
         {
-            sb.Append(obj.chemA + " + " + obj.chemB + " -> " + obj.result);
+           // sb.Append(obj.chemA + " + " + obj.chemB + " -> " + obj.result);
 
             if (obj.completed)
                 sb.Append("   <color=green>POG</color>");
