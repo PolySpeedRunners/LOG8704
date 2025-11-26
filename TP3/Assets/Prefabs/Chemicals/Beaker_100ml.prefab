@@ -586,7 +586,7 @@ MonoBehaviour:
   _backDepthBias: 0
   _rotationLevelCompensation: 0
   _ignoreGravity: 0
-  _reactToForces: 0
+  _reactToForces: 1
   _extentsScale: {x: 1, y: 1, z: 1}
   _noiseVariation: 1
   _foamNoiseTexture: {fileID: 0}
@@ -595,7 +595,7 @@ MonoBehaviour:
   _renderQueue: 3001
   _reflectionTexture: {fileID: 0}
   _physicsMass: 1
-  _physicsAngularDamp: 0.02
+  _physicsAngularDamp: 0.071
   _bubblesAmount: 32
   _bubblesSizeMin: 2
   _bubblesSizeMax: 4
@@ -726,7 +726,7 @@ GameObject:
   - component: {fileID: 3888500437201154115}
   m_Layer: 0
   m_Name: Beaker_100ml
-  m_TagString: Untagged
+  m_TagString: Trashable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -816,4 +816,7 @@ MonoBehaviour:
   liquidVolume: {fileID: 156410993814781755}
   fillSpeed: 0.01
   database: {fileID: 11400000, guid: c38dbf40bb456b843907a0509617d91d, type: 2}
-  defaultContents: []
+  defaultContents:
+  - type: 0
+    volume: 150
+  colorLerpSpeed: 3
