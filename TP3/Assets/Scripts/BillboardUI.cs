@@ -36,6 +36,4 @@ public class BillboardUI : MonoBehaviour
 
         objectiveText.text = sb.ToString();
     }
-
-
 }

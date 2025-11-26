@@ -9,5 +9,6 @@ public class VerificationPlate : MonoBehaviour
             return;
 
         QuestObjectiveManager.Instance.CheckContainer(container);
+        ResultDisplay.Instance.CheckUpdate(container);
     }
 }
