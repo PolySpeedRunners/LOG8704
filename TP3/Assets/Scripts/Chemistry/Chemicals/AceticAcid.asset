@@ -10,9 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4fc11bd3e8d5b864abee81266a85b585, type: 3}
-  m_Name: Base
+  m_Name: AceticAcid
   m_EditorClassIdentifier: Assembly-CSharp::ChemicalDefinition
   type: 2
-  color: {r: 0.8750591, g: 0, b: 1, a: 0}
-  reactionIngredients: []
-  reactionProduct: 0
+  color: {r: 0.9716981, g: 0.9716981, b: 0.9716981, a: 0}

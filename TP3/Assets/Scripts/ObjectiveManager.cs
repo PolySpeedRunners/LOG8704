@@ -39,7 +39,7 @@ public class QuestObjectiveManager : MonoBehaviour
     {
         foreach (var obj in objectives)
         {
-            if (!obj.completed && c.contents.ContainsKey(ChemicalType.Acid))
+            if (!obj.completed && c.contents.ContainsKey(ChemicalType.AceticAcid))
                // c.contents.ContainsKey(obj.chemA) &&
                // c.contents.ContainsKey(obj.chemB))
             {
