@@ -154,7 +154,6 @@ public class ChemicalContainer : MonoBehaviour
 
         TryReact();
         UpdateVisual();
-        QuestObjectiveManager.Instance.NotifyReaction("@Coronaxus help me out here what do i display");
     }
 
     // Remove a proportional amount of liquid

@@ -5,12 +5,14 @@ public class QuestObjectiveManager : MonoBehaviour
 {
     public static QuestObjectiveManager Instance;
 
+    [SerializeField]
+    private float ratioToWin = 0.5f;
+
     [System.Serializable]
     public class ReactionGoal
     {
-        public string chemA;
-        public string chemB;
-        public string result;
+        public List<ChemicalType> reactants;
+        public ChemicalType result;
         public bool completed;
     }
 
@@ -21,37 +23,33 @@ public class QuestObjectiveManager : MonoBehaviour
         Instance = this;
     }
 
-    public void NotifyReaction(string product)
-    {
-        foreach (var obj in objectives)
-        {
-            if (obj.result == product && !obj.completed)
-            {
-                obj.completed = true;
-                Debug.Log("Objective completed: " + product);
-            }
-        }
-
-        BillboardUI.Instance.Refresh();
-    }
+    //private bool verifyContent(ReactionGoal reaction, ChemicalType product)
+    //{
+    //    if (products.Contains(reaction.result))
+    //    {
+    //        return true;
+    //    }
+    //    return false;
+    //}
 
     public void CheckContainer(ChemicalContainer c)
     {
         foreach (var obj in objectives)
         {
-            if (!obj.completed && c.contents.ContainsKey(ChemicalType.AceticAcid))
-               // c.contents.ContainsKey(obj.chemA) &&
-               // c.contents.ContainsKey(obj.chemB))
+            foreach (KeyValuePair<ChemicalType, float> content in c.contents)
             {
-                obj.completed = true;
+                if (!obj.completed && obj.result == content.Key)//verifyContent(obj, content.Key)) // this should be replaced by a function callin chemicalcontainer maybe?
+                {
+                    obj.completed = true;
 
-                Debug.Log($"Objectif complété : {obj.chemA} + {obj.chemB}");
+                    // Debug.Log($"Objectif complété : {obj.chemA} + {obj.chemB}");
 
-                // Mise à jour du billboard
-                if (BillboardUI.Instance != null)
-                    BillboardUI.Instance.Refresh();
+                    // Mise à jour du billboard
+                    if (BillboardUI.Instance != null)
+                        BillboardUI.Instance.Refresh();
 
-                return;
+                    return;
+                }
             }
         }
         foreach (var kvp in c.contents)
@@ -60,4 +58,6 @@ public class QuestObjectiveManager : MonoBehaviour
         }
         Debug.Log("Aucun objectif validé par cet objet.");
     }
+
+
 }
