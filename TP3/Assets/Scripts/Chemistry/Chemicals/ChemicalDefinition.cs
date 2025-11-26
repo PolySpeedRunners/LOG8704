@@ -9,6 +9,7 @@ public enum ChemicalType
     PVA,
     PVA_Decomposed,
     PVA_Black,
+    Deconcentrated_PVA_Decomposed,
 }
 
 [CreateAssetMenu(menuName = "Chemistry/Chemical Definition")]

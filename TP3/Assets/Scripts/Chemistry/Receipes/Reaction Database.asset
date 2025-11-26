@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ReactionDatabase
   reactions:
   - {fileID: 11400000, guid: d27ff87d0a5d2054491eaa6e26b5319a, type: 2}
+  - {fileID: 11400000, guid: 6f0e121b886d0fb48905aa93ab3b522d, type: 2}
