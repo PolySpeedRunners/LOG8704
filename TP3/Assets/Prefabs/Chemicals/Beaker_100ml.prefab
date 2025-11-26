@@ -815,8 +815,23 @@ MonoBehaviour:
   maxVolume: 250
   liquidVolume: {fileID: 156410993814781755}
   fillSpeed: 0.01
-  database: {fileID: 11400000, guid: c38dbf40bb456b843907a0509617d91d, type: 2}
+  ambientTemperature: 25
+  temperatureDecayRate: 1
+  reactionInterval: 0.1
+  chemicalData: {fileID: 11400000, guid: c38dbf40bb456b843907a0509617d91d, type: 2}
+  reactionData: {fileID: 11400000, guid: 379d5ca791cb4cf4593b79dcb8fdd6ea, type: 2}
   defaultContents:
   - type: 0
     volume: 150
-  colorLerpSpeed: 3
+  sparkling:
+    baseSpeed: 0.05
+    baseIntensity: 1.785
+    baseAmount: 0
+    maxSpeed: 0.193
+    maxIntensity: 0.65
+    maxAmount: 0.193
+    temperatureStart: 75
+    temperatureEnd: 100
+  currentTemperature: 25
+  hasHeatSource: 0
+  isVacuum: 0
