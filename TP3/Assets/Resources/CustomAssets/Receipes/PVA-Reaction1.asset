@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 469bcefa7d31d2748b8a23f847a8fdd6, type: 3}
   m_Name: PVA-Reaction1
   m_EditorClassIdentifier: Assembly-CSharp::ReactionRecipe
   reactants:
@@ -20,6 +20,5 @@ MonoBehaviour:
     ratio: 1
   reactionDuration: 1
   requireHeatSource: 0
-  requireVacuum: 0
-  temperatureMargin: 5
   targetTemperature: 200
+  isDistillation: 0

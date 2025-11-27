@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: ReactionDatabase
   m_EditorClassIdentifier: Assembly-CSharp::ReactionDatabase
   reactions:
-  - {fileID: 11400000, guid: d27ff87d0a5d2054491eaa6e26b5319a, type: 2}
-  - {fileID: 11400000, guid: 6f0e121b886d0fb48905aa93ab3b522d, type: 2}
-  - {fileID: 11400000, guid: 76044f7774a82a446b6f2638dd872b9f, type: 2}
+  - {fileID: 11400000, guid: e3e95d7ee03f1b545bd872ec29770631, type: 2}
+  - {fileID: 11400000, guid: 9518c586cb990ea479b2e3d7f99dc336, type: 2}
+  - {fileID: 11400000, guid: 102cbf4b663debb48bec213f1f41ecbf, type: 2}

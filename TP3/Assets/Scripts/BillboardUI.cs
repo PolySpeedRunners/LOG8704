@@ -20,8 +20,6 @@ public class BillboardUI : MonoBehaviour
     }
     public void Refresh()
     {
-        Debug.Log("LFDEBUG - billboard - " + QuestObjectiveManager.Instance.objectives.Count);
-
         if (objectiveText == null)
         {
             Debug.LogWarning("LFDEBUG - BillboardUI: TMP_Text reference is missing!");
@@ -49,4 +47,49 @@ public class BillboardUI : MonoBehaviour
         }
         objectiveText.text = sb.ToString();
     }
+    //public void Refresh()
+    //{
+    //    if (objectiveText == null)
+    //    {
+    //        Debug.LogWarning("LFDEBUG - BillboardUI: TMP_Text reference is missing!");
+    //        return;
+    //    }
+
+    //    StringBuilder sb = new StringBuilder();
+
+    //    foreach (var obj in QuestObjectiveManager.Instance.objectives)
+    //    {
+    //        var recipe = obj.recipe;
+
+    //        if (recipe == null)
+    //        {
+    //            sb.Append("<color=red>Invalid recipe</color>\n");
+    //            continue;
+    //        }
+
+    //        // Couleur d'état
+    //        string status = obj.completed
+    //            ? "<color=green>[ Fait ]</color>"
+    //            : "<color=red>[ À Faire ]</color>";
+
+    //        // Récupération des ingrédients (reactifs)
+    //        string reagents = "—";
+    //        if (recipe.reagents != null && recipe.reagents.Count > 0)
+    //            reagents = string.Join(" + ", recipe.reagents.Select(r => r.type.ToString()));
+
+    //        // Récupération des produits
+    //        string products = "—";
+    //        if (recipe.products != null && recipe.products.Count > 0)
+    //            products = string.Join(" + ", recipe.products.Select(p => p.type.ToString()));
+
+    //        // Température (si applicable)
+    //        string temperature = "";
+    //        if (recipe.temperatureRequired > 0f)
+    //            temperature = $" + {recipe.temperatureRequired}°C";
+
+    //        sb.Append($"{status} {reagents}{temperature} = {products}\n");
+    //    }
+
+    //    objectiveText.text = sb.ToString();
+    //}
 }
