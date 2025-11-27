@@ -68,33 +68,6 @@ public class ChemicalContainer : MonoBehaviour
     public bool isVacuum = false;
     public float heatIncreaseRate = 4f;
 
-
-    //private void Awake()
-    //{
-    //    Debug.Log("LFDEBUG - I AM AWAKE");
-    //    Debug.Log("LFDEBUG - oh. before the null ");
-    //    if (liquidVolume != null)
-    //    {
-    //        liquidVolume.sparklingAmount = sparkling.baseAmount;
-    //        liquidVolume.sparklingIntensity = sparkling.baseIntensity;
-    //        liquidVolume.speed = sparkling.baseSpeed;
-
-    //        liquidVolume.turbulence1 = sparkling.turbulence1Start;
-    //        liquidVolume.foamDensity = sparkling.foamDensityStart;
-    //        liquidVolume.foamScale = sparkling.foamScale;
-    //        liquidVolume.foamThickness = sparkling.foamThicknessStart;
-    //        liquidVolume.foamTurbulence = sparkling.foamTurbulence;
-    //        liquidVolume.requireBubblesUpdate = true;
-    //    }
-    //    currentColor = ComputeBlendedColor();
-
-    //    Debug.Log("LFDEBUG - boys we made it ");
-
-    //    Debug.Log("LFDEBUG - DB content count = " + chemicalData.definitions.Length);
-
-
-    //    UpdateVisual();
-    //}
     private void Start()
     {
         chemicalData = ChemistryDataRegistry.Instance?.ChemicalDB;
