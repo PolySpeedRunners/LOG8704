@@ -260,7 +260,7 @@ public class ChemicalContainer : MonoBehaviour
         }
 
         // --- Temperature factor ---
-        float minTemp = r.targetTemperature - r.temperatureMargin;
+        float minTemp = r.targetTemperature;
         float tempFactor = currentTemperature < minTemp
             ? Mathf.Clamp01(currentTemperature / minTemp)
             : 1f;

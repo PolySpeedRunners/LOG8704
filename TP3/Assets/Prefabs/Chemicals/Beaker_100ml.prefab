@@ -623,6 +623,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpillController
   spill: {fileID: 1000010388951712, guid: c125e989fbb199d4ca373f5f668bb5a4, type: 3}
+  localOffset: {x: 0, y: 0, z: 0.02}
 --- !u!1 &7528109225136422645
 GameObject:
   m_ObjectHideFlags: 0
@@ -820,9 +821,7 @@ MonoBehaviour:
   reactionInterval: 0.1
   chemicalData: {fileID: 11400000, guid: c38dbf40bb456b843907a0509617d91d, type: 2}
   reactionData: {fileID: 11400000, guid: 379d5ca791cb4cf4593b79dcb8fdd6ea, type: 2}
-  contents:
-  - type: 0
-    volume: 200
+  contents: []
   sparkling:
     baseSpeed: 0.05
     baseIntensity: 1.785
