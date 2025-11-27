@@ -10,7 +10,8 @@ public class LiquidSpill : MonoBehaviour
     private LiquidVolume lv;
     private GameObject[] dropTemplates;
     private const int DROP_TEMPLATES_COUNT = 10;
-
+    [Header("Spill Offset")]
+    public Vector3 localOffset = new Vector3(0, 0, 0.02f); // editable in Inspector
     private ChemicalContainer container;
 
     void Start()
@@ -55,7 +56,6 @@ public class LiquidSpill : MonoBehaviour
             float mlSpilled = spillAmount * container.maxVolume * 0.1f;
             if (mlSpilled < 0.1f) mlSpilled = 0.1f;
 
-            // Take proportional chemical amounts from container (List version)
             List<ChemicalAmount> removed = container.TakeProportional(mlSpilled);
 
             for (int k = 0; k < drops; k++)
@@ -66,18 +66,15 @@ public class LiquidSpill : MonoBehaviour
                 Rigidbody rb = oneSpill.GetComponent<Rigidbody>();
                 DropletMetadata meta = oneSpill.GetComponent<DropletMetadata>();
 
-                // Assign chemical contents to droplet
-                meta.contents = new List<ChemicalAmount>();
-                foreach (var chem in removed)
-                {
-                    meta.contents.Add(new ChemicalAmount
-                    {
-                        type = chem.type,
-                        volume = chem.volume
-                    });
-                }
+                // Copy chemicals
+                meta.contents = new List<ChemicalAmount>(removed);
 
-                rb.position = spillPos + Random.insideUnitSphere * 0.01f;
+                // OFFSET THAT ROTATES WITH OBJECT
+                Vector3 worldOffset = transform.rotation * localOffset;
+
+                // Final position
+                rb.position = spillPos + worldOffset + Random.insideUnitSphere * 0.01f;
+
                 rb.AddForce(new Vector3(Random.value - 0.5f, Random.value * 0.1f - 0.2f, Random.value - 0.5f));
 
                 StartCoroutine(DestroySpill(oneSpill));
