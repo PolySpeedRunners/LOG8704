@@ -15,30 +15,87 @@ public class QuestObjectiveManager : MonoBehaviour
         public bool completed;
     }
 
+    // [SerializeField]
+    private ReactionDatabase reactionDatabase;
     [SerializeField]
-    private ReactionDatabase database;
     public List<ReactionGoal> objectives = new List<ReactionGoal>();
 
     void Awake()
     {
         Instance = this;
+        Debug.Log("LFDEBUG - objectivemanager woke");
+        // auto-load at runtime
+        if (reactionDatabase == null)
+        {
+            reactionDatabase = Resources.Load<ReactionDatabase>("CustomAssets/Receipes/ReactionDatabase");
+            if (reactionDatabase == null)
+                Debug.LogError("LFDEBUG - ReactionDatabase NOT FOUND in Resources!");
+            else
+                Debug.Log("LFDEBUG - lets go bruthers");
+        }
+        objectives.Clear();
+
+
+        ReactionRecipe DilutionPVA = Resources.Load<ReactionRecipe>("CustomAssets/Receipes/Dilution-PVA");
+        ReactionRecipe PVAReaction1 = Resources.Load<ReactionRecipe>("CustomAssets/Receipes/PVA-Reaction1");
+
+        if (DilutionPVA != null)
+        {
+            objectives.Add(new ReactionGoal { recipe = DilutionPVA, completed = false });
+            Debug.Log("LFDEBUG - Added objective: " + DilutionPVA.name);
+        }
+        else
+        {
+            Debug.LogError("LFDEBUG - Dilution-PVA recipe not found in Resources!");
+        }
+
+        if (PVAReaction1 != null)
+        {
+            objectives.Add(new ReactionGoal { recipe = PVAReaction1, completed = false });
+            Debug.Log("LFDEBUG - Added objective: " + PVAReaction1.name);
+        }
+        else
+        {
+            Debug.LogError("LFDEBUG - PVA-Reaction1 recipe not found in Resources!");
+        }
+
+        // --- Refresh Billboard UI ---
+        if (BillboardUI.Instance != null)
+        {
+            BillboardUI.Instance.Refresh();
+            Debug.Log("LFDEBUG - BillboardUI refreshed");
+        }
+        else
+        {
+            Debug.LogWarning("LFDEBUG - BillboardUI.Instance is null, cannot refresh");
+        }
     }
 
     private void Start()
     {
-        objectives.Clear();
+        Debug.Log($"LFDEBUG - HEYYYYYYYYYYYYYYYYYYYYYYY IM ALIIIIIIIIIIIIIIIIIIIIIIIIIIVE");
 
-        foreach (ReactionRecipe reaction in database.reactions)
-        {
-            ReactionGoal goal = new ReactionGoal
-            {
-                recipe = reaction,
-                completed = false
-            };
+        //if (reactionDatabase == null)
+        //{
+        //    Debug.Log($"LFDEBUG - MORE NULLLLLLLSSSS of the reaction database");
+        //}
 
-            objectives.Add(goal);
-        }
+        //foreach (ReactionRecipe reaction in reactionDatabase.reactions)
+        //{
+        //    ReactionGoal goal = new ReactionGoal
+        //    {
+        //        recipe = reaction,
+        //        completed = false
+        //    };
 
+        //    objectives.Add(goal);
+        //    if (reaction == null)
+        //        Debug.LogError($"LFDEBUG - Reaction #{reaction} is NULL!");
+        //    else
+        //        Debug.Log($"LFDEBUG - Reaction #{reaction}: {reaction.name}");
+        //}
+
+        Debug.Log($"LFDEBUG - HI IM CALLING REFRESH");
         BillboardUI.Instance.Refresh();
     }
 
@@ -65,7 +122,7 @@ public class QuestObjectiveManager : MonoBehaviour
                     obj.completed = true;
 
                     // Optional debug
-                    Debug.Log($"Objective completed for {content.type}");
+                    Debug.Log($"LFDEBUG - Objective completed for {content.type}");
 
                     if (BillboardUI.Instance != null)
                         BillboardUI.Instance.Refresh();
@@ -78,8 +135,8 @@ public class QuestObjectiveManager : MonoBehaviour
         // Debugging: show what chemicals are in the container
         foreach (var content in c.contents)
         {
-            Debug.Log($"[DEBUG] contains: {content.type} = {content.volume}");
+            Debug.Log($"LFDEBUG - contains: {content.type} = {content.volume}");
         }
-        Debug.Log("No objective was validated by this container.");
+        Debug.Log("LFDEBUG - we reached the end of checkcontainer");
     }
 }

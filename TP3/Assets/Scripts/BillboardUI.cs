@@ -20,15 +20,15 @@ public class BillboardUI : MonoBehaviour
     }
     public void Refresh()
     {
+        Debug.Log("LFDEBUG - billboard - " + QuestObjectiveManager.Instance.objectives.Count);
+
         if (objectiveText == null)
         {
-            Debug.LogWarning("BillboardUI: TMP_Text reference is missing!");
+            Debug.LogWarning("LFDEBUG - BillboardUI: TMP_Text reference is missing!");
             return;
         }
 
         StringBuilder sb = new StringBuilder();
-
-        Debug.Log("billboard - " + QuestObjectiveManager.Instance.objectives.Count);
 
         foreach (var obj in QuestObjectiveManager.Instance.objectives)
         {

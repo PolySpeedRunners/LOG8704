@@ -52,8 +52,8 @@ public class ChemicalContainer : MonoBehaviour
     [SerializeField] private float reactionInterval = 0.1f;
 
     [Header("Chemical Data")]
-    [SerializeField] private ChemicalDatabase chemicalData;
-    [SerializeField] private ReactionDatabase reactionData;
+    private ChemicalDatabase chemicalData;
+    private ReactionDatabase reactionData;
     [SerializeField] public List<ChemicalAmount> contents = new();
 
     [Header("Sparkling Settings")]
@@ -91,6 +91,9 @@ public class ChemicalContainer : MonoBehaviour
 
     private void Update()
     {
+        chemicalData = ChemistryDataRegistry.Instance.ChemicalDB;
+        reactionData = ChemistryDataRegistry.Instance.ReactionDB;
+
         if (hasHeatSource)
         {
             currentTemperature += heatIncreaseRate * Time.deltaTime;
