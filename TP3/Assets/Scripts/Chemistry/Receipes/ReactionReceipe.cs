@@ -19,13 +19,12 @@ public class ReactionRecipe : ScriptableObject
 
     [Tooltip("Time in seconds for full conversion if ratios allow")]
     [Range(0.01f, 10f)]
-    public float reactionDuration = 1f; // new: full reaction duration
+    public float reactionDuration = 1f;
 
     // Optional prerequisites
     public bool requireHeatSource = false;
-    public bool requireVacuum = false;
+    public float targetTemperature = 25f;
 
-    [Tooltip("Temperature margin around target temperature (±degrees Celsius)")]
-    public float temperatureMargin = 5f; 
-    public float targetTemperature = 25f; // ideal temp for this reaction
+    [Header("Distillation")]
+    public bool isDistillation = false;
 }

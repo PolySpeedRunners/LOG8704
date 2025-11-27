@@ -21,10 +21,9 @@ public class ReactionDatabase : ScriptableObject
 
             // --- Check prerequisites ---
             if (r.requireHeatSource && !container.hasHeatSource) continue;
-            if (r.requireVacuum && !container.isVacuum) continue;
 
             // --- Check temperature (only minimum required) ---
-            if (container.currentTemperature < r.targetTemperature - r.temperatureMargin)
+            if (container.currentTemperature < r.targetTemperature)
                 continue;
 
             recipe = r;
@@ -34,4 +33,29 @@ public class ReactionDatabase : ScriptableObject
         return false;
     }
 
+    public bool TryFindDistillationReaction(List<ChemicalAmount> contents, out ReactionRecipe recipe)
+    {
+        recipe = null;
+
+        if (contents == null || contents.Count == 0)
+            return false;
+
+        foreach (var r in reactions)
+        {
+            // Only use distillation recipes
+            if (!r.isDistillation)
+                continue;
+
+            bool allReactantsExist = r.reactants.All(req =>
+                contents.Any(c => c.type == req.type && c.volume > 0f));
+
+            if (!allReactantsExist)
+                continue;
+
+            recipe = r;
+            return true;
+        }
+
+        return false;
+    }
 }

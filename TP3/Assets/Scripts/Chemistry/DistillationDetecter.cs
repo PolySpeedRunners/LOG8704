@@ -9,8 +9,7 @@ public class DistillationDetector : MonoBehaviour
         var container = other.GetComponentInParent<ChemicalContainer>();
         if (container != null)
         {
-            distillationSystem.AttachContainer(container);
-
+            distillationSystem.TryPlaceContainer(container);
         }
     }
 
@@ -19,7 +18,7 @@ public class DistillationDetector : MonoBehaviour
         var container = other.GetComponentInParent<ChemicalContainer>();
         if (container != null)
         {
-            distillationSystem.DetachContainer(container);
+            distillationSystem.StopDraining(container);
         }
     }
 }

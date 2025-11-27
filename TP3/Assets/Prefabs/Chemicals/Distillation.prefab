@@ -159,7 +159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31bc8057612a50542957b302363dc770, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DistillationDetecter
-  distillationSystem: {fileID: 4220850931031415758}
+  distillationSystem: {fileID: 8953404030939614632}
 --- !u!1 &4047294686261512375
 GameObject:
   m_ObjectHideFlags: 0
@@ -231,7 +231,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3833014590229164259}
-  - component: {fileID: 4220850931031415758}
+  - component: {fileID: 8953404030939614632}
   m_Layer: 0
   m_Name: Distillation
   m_TagString: Untagged
@@ -263,7 +263,7 @@ Transform:
   - {fileID: 6647845180804459275}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4220850931031415758
+--- !u!114 &8953404030939614632
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -272,47 +272,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 4796909407210651659}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20b915ae8ba6a33408b722bcc936f98d, type: 3}
+  m_Script: {fileID: 11500000, guid: a34b2489d57dcf5459149e4f7416d235, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DistillationSystem
-  heatRate: 20
-  transferRate: 15
-  maxCapacity: 500
-  ambientTemperature: 25
-  temperatureDecayRate: 1
-  liquidVolume: {fileID: 1543166042905947745}
-  chemicalData: {fileID: 11400000, guid: c38dbf40bb456b843907a0509617d91d, type: 2}
-  reactionDatabase: {fileID: 11400000, guid: 379d5ca791cb4cf4593b79dcb8fdd6ea, type: 2}
-  sparklingSettings:
-    baseSpeed: 0.05
-    baseIntensity: 1.785
-    baseAmount: 0
-    maxSpeed: 0.193
-    maxIntensity: 0.65
-    maxAmount: 0.193
-    temperatureStart: 75
-    temperatureEnd: 100
-    turbulence1Step: 0.7123
-    turbulence1Start: 0
-    turbulence1End: 1
-    foamDensityStart: 0
-    foamDensityEnd: 0.022
-    foamThicknessStart: 0
-    foamThicknessEnd: 0.3
-    foamScale: 0.714
-    foamTurbulence: 0.5
-  attachedContainers: []
-  outputContainers: []
-  detachPositions:
+  drainRate: 20
+  emptyBeakerPrefab: {fileID: 7528109225136422647, guid: e8f7cd3e231f96e4fa1eccabd384af88, type: 3}
+  rejectPositions:
   - {fileID: 2616989706079375347}
   - {fileID: 8767912384341647754}
   - {fileID: 6647845180804459275}
-  beakerPrefab: {fileID: 7528109225136422647, guid: e8f7cd3e231f96e4fa1eccabd384af88, type: 3}
-  outputSpawnPositions:
+  outputPositions:
   - {fileID: 4081281040134281766}
   - {fileID: 2120993346019040532}
   - {fileID: 6684803797392785683}
-  contents: []
+  distillationSphere: {fileID: 1543166042905947745}
+  distillationMaxVolume: 200
+  reactionDatabase: {fileID: 11400000, guid: 379d5ca791cb4cf4593b79dcb8fdd6ea, type: 2}
 --- !u!1 &6379478086799899352
 GameObject:
   m_ObjectHideFlags: 0

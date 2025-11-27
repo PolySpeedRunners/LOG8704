@@ -20,7 +20,5 @@ MonoBehaviour:
     ratio: 1
   reactionDuration: 1
   requireHeatSource: 0
-  requireVacuum: 0
-  requireDistillation: 1
-  temperatureMargin: 5
   targetTemperature: 100
+  isDistillation: 1
