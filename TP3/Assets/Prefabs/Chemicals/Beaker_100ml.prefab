@@ -820,9 +820,9 @@ MonoBehaviour:
   reactionInterval: 0.1
   chemicalData: {fileID: 11400000, guid: c38dbf40bb456b843907a0509617d91d, type: 2}
   reactionData: {fileID: 11400000, guid: 379d5ca791cb4cf4593b79dcb8fdd6ea, type: 2}
-  defaultContents:
+  contents:
   - type: 0
-    volume: 150
+    volume: 200
   sparkling:
     baseSpeed: 0.05
     baseIntensity: 1.785
@@ -832,6 +832,16 @@ MonoBehaviour:
     maxAmount: 0.193
     temperatureStart: 75
     temperatureEnd: 100
+    turbulence1Step: 0.7123
+    turbulence1Start: 0
+    turbulence1End: 1
+    foamDensityStart: 0
+    foamDensityEnd: 0.022
+    foamThicknessStart: 0
+    foamThicknessEnd: 0.3
+    foamScale: 0.714
+    foamTurbulence: 0.5
   currentTemperature: 25
   hasHeatSource: 0
   isVacuum: 0
+  heatIncreaseRate: 4
