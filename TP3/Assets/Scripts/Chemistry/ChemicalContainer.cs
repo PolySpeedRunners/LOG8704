@@ -293,7 +293,7 @@ public class ChemicalContainer : MonoBehaviour
                 chem.volume += produceAmount;
         }
 
-        contents.RemoveAll(c => c.volume <= 0.0001f);
+        contents.RemoveAll(c => c.volume < 0f);
 
         // --- Reaction finished ---
         if (currentReactionProgress >= 1f)
