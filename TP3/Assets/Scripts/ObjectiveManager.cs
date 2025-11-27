@@ -38,6 +38,8 @@ public class QuestObjectiveManager : MonoBehaviour
 
             objectives.Add(goal);
         }
+
+        BillboardUI.Instance.Refresh();
     }
 
     private bool ValidateReaction(List<ChemicalRatio> products, ChemicalType contentType)
@@ -63,9 +65,8 @@ public class QuestObjectiveManager : MonoBehaviour
                     obj.completed = true;
 
                     // Optional debug
-                    // Debug.Log($"Objective completed for {content.type}");
+                    Debug.Log($"Objective completed for {content.type}");
 
-                    // Update the billboard UI if it exists
                     if (BillboardUI.Instance != null)
                         BillboardUI.Instance.Refresh();
 
