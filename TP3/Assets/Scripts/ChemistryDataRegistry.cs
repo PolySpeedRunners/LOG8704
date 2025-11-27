@@ -11,8 +11,8 @@ public class ChemistryDataRegistry : MonoBehaviour
     public List<ReactionRecipe> ReactionsRecepies; //{ get; private set; }
     [SerializeField]
     public ChemicalDatabase ChemicalDB;//{ get; private set; }
-    //[SerializeField]
-    //public List<ChemicalDefinition> ChemicalDefinitions; //  { get; private set; }
+    [SerializeField]
+    public List<ChemicalDefinition> ChemicalDefinitions; //  { get; private set; }
 
     private void Awake()
     {
@@ -30,27 +30,22 @@ public class ChemistryDataRegistry : MonoBehaviour
 
     private void LoadDatabases()
     {
-        Debug.Log("LFDEBUG - [ChemistryDataRegistry] Loading ScriptableObject databases...");
-
-        //ReactionDB = Resources.Load<ReactionDatabase>("CustomAssets/Receipes/Reaction Database");
-        //ReactionDBtest = Resources.Load<ReactionRecipe>("CustomAssets/Receipes/PVA-Reaction1");
-        //ChemicalDB = Resources.Load<ChemicalDatabase>("CustomAssets/Chemicals/ChemicalDatabase");
-        //ChemicalDefinition = Resources.Load<ChemicalDefinition>("CustomAssets/Chemicals/PVA");
-
-        Debug.Log("LFDEBUG - attempting ReactionDatabase in Resources!");
         if (ReactionDB == null)
-            Debug.LogError("LFDEBUG - ReactionDatabasein Resources!");
+            Debug.LogError("LFDEBUG - ReactionDatabase in Resources!");
 
-        Debug.Log("LFDEBUG - attempting ReactionRecipein Resources!");
-        if (ReactionsRecepies == null)
+        if (ReactionsRecepies.Count == 0)
             Debug.LogError("LFDEBUG - ReactionRecipe SINGLETON NOT FOUND in Resources!");
 
-        Debug.Log("LFDEBUG - attempting ChemicalDatabase SINGLETON NOT FOUND in Resources!");
         if (ChemicalDB == null)
             Debug.LogError("LFDEBUG - ChemicalDatabase SINGLETON NOT FOUND in Resources!");
 
-        //Debug.Log("LFDEBUG - attempting ChemicalDefinition SINGLETON NOT FOUND in Resources!");
-        //if (ChemicalDefinitions == null)
-        //    Debug.LogError("LFDEBUG - ChemicalDefinition SINGLETON NOT FOUND in Resources!");
+        if (ChemicalDefinitions.Count == 0)
+            Debug.LogError("LFDEBUG - ChemicalDefinition SINGLETON NOT FOUND in Resources!");
+
+        //ReactionDB = Resources.Load<ReactionDatabase>("CustomAssets/Receipes/Reaction Database");
+        //ReactionDBtest = Resources.Load<ReactionRecipe>("CustomAssets/Receipes/PVA-Reaction1");
+        ChemicalDB = Resources.Load<ChemicalDatabase>("CustomAssets/Chemicals/ChemicalDatabase");
+        Debug.Log("LFDEBUG - hallo c'est pour le cehmical db" + ChemicalDB == null);
+        //ChemicalDefinition = Resources.Load<ChemicalDefinition>("CustomAssets/Chemicals/PVA");
     }
 }

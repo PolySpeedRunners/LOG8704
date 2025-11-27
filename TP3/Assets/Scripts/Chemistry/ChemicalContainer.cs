@@ -69,9 +69,55 @@ public class ChemicalContainer : MonoBehaviour
     public float heatIncreaseRate = 4f;
 
 
-    private void Awake()
+    //private void Awake()
+    //{
+    //    Debug.Log("LFDEBUG - I AM AWAKE");
+    //    Debug.Log("LFDEBUG - oh. before the null ");
+    //    if (liquidVolume != null)
+    //    {
+    //        liquidVolume.sparklingAmount = sparkling.baseAmount;
+    //        liquidVolume.sparklingIntensity = sparkling.baseIntensity;
+    //        liquidVolume.speed = sparkling.baseSpeed;
+
+    //        liquidVolume.turbulence1 = sparkling.turbulence1Start;
+    //        liquidVolume.foamDensity = sparkling.foamDensityStart;
+    //        liquidVolume.foamScale = sparkling.foamScale;
+    //        liquidVolume.foamThickness = sparkling.foamThicknessStart;
+    //        liquidVolume.foamTurbulence = sparkling.foamTurbulence;
+    //        liquidVolume.requireBubblesUpdate = true;
+    //    }
+    //    currentColor = ComputeBlendedColor();
+
+    //    Debug.Log("LFDEBUG - boys we made it ");
+
+    //    Debug.Log("LFDEBUG - DB content count = " + chemicalData.definitions.Length);
+
+
+    //    UpdateVisual();
+    //}
+    private void Start()
     {
-        currentColor = ComputeBlendedColor();
+        chemicalData = ChemistryDataRegistry.Instance?.ChemicalDB;
+        reactionData = ChemistryDataRegistry.Instance?.ReactionDB;
+
+        if (chemicalData == null)
+        {
+            Debug.LogError("LFDEBUG - ChemicalContainer: chemicalData is NULL in Start(). Aborting initialization.");
+            return;
+        }
+
+        if (chemicalData.definitions == null || chemicalData.definitions.Length == 0)
+        {
+            Debug.LogError("LFDEBUG - ChemicalContainer: Chemical definitions are missing or empty.");
+        }
+
+        if (reactionData == null)
+        {
+            Debug.LogWarning("LFDEBUG - ChemicalContainer: reactionData is NULL. Reactions will be disabled.");
+        }
+
+        Debug.Log("LFDEBUG - chemicalData loaded. Definition count = " + chemicalData.definitions.Length);
+
         if (liquidVolume != null)
         {
             liquidVolume.sparklingAmount = sparkling.baseAmount;
@@ -85,9 +131,18 @@ public class ChemicalContainer : MonoBehaviour
             liquidVolume.foamTurbulence = sparkling.foamTurbulence;
             liquidVolume.requireBubblesUpdate = true;
         }
+        else
+        {
+            Debug.LogWarning("LFDEBUG - chemicalContainer: liquidVolume reference missing.");
+        }
 
+        currentColor = ComputeBlendedColor();
         UpdateVisual();
+
+        Debug.Log("LFDEBUG - ChemicalContainer fully initialized.");
     }
+
+
 
     private void Update()
     {

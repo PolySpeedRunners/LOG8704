@@ -49,11 +49,8 @@ public class QuestObjectiveManager : MonoBehaviour
             objectives.Add(goal);
             if (reaction == null)
                 Debug.LogError($"LFDEBUG - Reaction #{reaction} is NULL!");
-            else
-                Debug.Log($"LFDEBUG - Reaction #{reaction}: {reaction.name}");
         }
 
-        Debug.Log($"LFDEBUG - HI IM CALLING REFRESH");
         BillboardUI.Instance.Refresh();
     }
 
@@ -95,6 +92,5 @@ public class QuestObjectiveManager : MonoBehaviour
         {
             Debug.Log($"LFDEBUG - contains: {content.type} = {content.volume}");
         }
-        Debug.Log("LFDEBUG - we reached the end of checkcontainer");
     }
 }
