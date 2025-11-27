@@ -26,12 +26,12 @@ public class BillboardUI : MonoBehaviour
             return;
         }
 
-
         StringBuilder sb = new StringBuilder();
+
+        Debug.Log("billboard - " + QuestObjectiveManager.Instance.objectives.Count);
 
         foreach (var obj in QuestObjectiveManager.Instance.objectives)
         {
-            // Sécurité
             if (obj.recipe == null)
             {
                 sb.Append("<color=red>Invalid recipe</color>\n");
@@ -47,5 +47,6 @@ public class BillboardUI : MonoBehaviour
 
             sb.Append("\n");
         }
+        objectiveText.text = sb.ToString();
     }
 }
