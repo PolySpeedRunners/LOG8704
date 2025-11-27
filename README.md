@@ -24,3 +24,9 @@ Pour build le projet et le tester sur android:
 - Sélectionner comme option de build "Development build"
 - Sélectionner l'appareil sur lequel vous voulez build et rouler l'application (l'appareil doit être connecté)
 - Sélectionner "build and run" puis essayer l'application lors de la fin du build. 
+
+TP3 - Projet
+Pour tester le projet dans l'éditeur:
+- Aller au dernier commit avant 2025-11-27 0:00.
+- Sélectionner la scène `Assets/Scenes/Game` du projet Unity
+- Cliquer sur le bouton play
